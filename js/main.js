@@ -14,7 +14,8 @@ var Main = {
 		if (!url) {
 			return this.showPrompt();
 		}
-
+	
+		this.initFixtureSupport();	
 		this.proxyTest();
 		Helper.serial([
 			$.proxy(this, 'loadJs', url),
@@ -32,7 +33,25 @@ var Main = {
 
 	showPrompt: function() {
 		alert('请在url中指定testcase/testsuite\n' +
-					'例: test.html?base=http://style.china.alibaba.com/app/winport&test=main-test/module/widget/placeholder-test');
+					'例: test.html?base=http://style.china.alibaba.com/app/winport/js&test=main-test/suite');
+	},
+
+	initFixtureSupport: function() {
+		var self = this,
+			proxyUrl = 'fixture.php',	
+			fixture = new jasmine.Fixtures();
+
+		fixture.fixturesPath = 'remote';
+		
+		load = function() {
+			var base = self.getBaseUrl(),
+				urls = $.map(arguments, function(url) { 
+					return proxyUrl + '?url=' + Helper.join(base, url);
+				});
+			fixture.load.apply(fixture, urls);
+		};
+
+		window.loadFixtures = load;	
 	},
 
 	proxyTest: function() {
@@ -56,7 +75,7 @@ var Main = {
 	},
 
 	expandUrl: function(url, stamp) {
-		var base = this.getUrlBase();
+		var base = this.getBaseUrl();
 		if (!/\.js$/.test(url)) {
 			url += '.js';
 		}
@@ -100,7 +119,7 @@ var Main = {
 		return $.when();
 	},
 
-	getUrlBase: function() {
+	getBaseUrl: function() {
 		return this.getParam('base');
 	},
 
