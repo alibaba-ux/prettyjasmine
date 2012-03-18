@@ -37,17 +37,22 @@ var Main = {
 
 	initFixtureSupport: function() {
 		var self = this,
+			host = /^https?:\/\/[^\/]+\//.exec(window.location.href)[0],
 			proxyUrl = 'fixture.php',	
 			fixture = new jasmine.Fixtures();
 
-		fixture.fixturesPath = 'remote';
-		
 		load = function() {
-			var base = self.getBaseUrl(),
-				urls = $.map(arguments, function(url) { 
-					return proxyUrl + '?url=' + Helper.join(base, url);
-				});
-			fixture.load.apply(fixture, urls);
+			$.each(arguments, function(index, url) {
+				url = self.expandUrl(url);
+				if (url.indexOf(host) !== 0) {
+					fixture.fixturesPath = 'remote';
+					url = proxyUrl + '?url=' + url;	
+				} else {
+					url = url.replace(host, '');
+					fixture.fixturesPath = '/';
+				}	
+				fixture.load(url);
+			});
 		};
 
 		window.loadFixtures = load;	
@@ -69,7 +74,7 @@ var Main = {
 	},
 
 	loadJs: function(url) {
-		url = this.expandUrl(url);
+		url = this.expandJsUrl(url);
 		return $.Deferred(function(p) {
 			var fired = false;
 			$.ajax(url, { 
@@ -88,18 +93,19 @@ var Main = {
 		}).fail($.proxy(this, 'alert', '找不到文件: ' + url));
 	},
 
-	expandUrl: function(url, stamp) {
-		var base = this.getBaseUrl();
+	expandUrl: function(url) {
+		var base = this.getBaseUrl();	
+		if (base && !/^https?:\/\//.test(url) && base) {
+			url = Helper.join(base, url);
+		}
+		return url;
+	},
+
+	expandJsUrl: function(url) {
 		if (!/\.js$/.test(url)) {
 			url += '.js';
 		}
-		if (!/^https?:\/\//.test(url) && base) {
-			url = Helper.join(base, url);
-		}
-		if (stamp) {
-			url = Helper.url(url, '_=' + $.now());
-		}
-		return url;
+		return this.expandUrl(url);
 	},
 
 	loadImportjs: function() {
@@ -135,7 +141,11 @@ var Main = {
 	},
 
 	getBaseUrl: function() {
-		return this.getParam('base');
+		var base = this.getParam('base');
+		if (base && !/^https?:\/\//.test(base)) {
+			base = 'http://' + base;
+		}
+		return base;
 	},
 
 	runTests: function() {
