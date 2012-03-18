@@ -16,7 +16,7 @@ return {
 
 	unparam: function(search) {
 		var map = {};
-		search =(search || '').replace(/^\?/, '').split('&');
+		search =(search || '').replace(/^\?/, '').replace(/[+]/g, ' ').split('&');
 		$.each(search, function(index, part) {
 			part = part.split('=', 2);
 			map[$.trim(part[0])] = $.trim(decodeURIComponent(part[1] || ''));
