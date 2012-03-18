@@ -13,6 +13,10 @@ label, input, button, select, textarea {
   display: inline;
 }
 
-.container {
+.input-panel {
   display: none;
+}
+
+.runner-panel .alert {
+  margin-top: 4px; 
 }

@@ -13,7 +13,7 @@ var Main = {
 		if (!url) {
 			return this.showPrompt();
 		}
-	
+
 		this.initFixtureSupport();	
 		this.proxyTest();
 		Helper.serial([
@@ -32,6 +32,7 @@ var Main = {
 
 	showPrompt: function() {
 		$('div.container').show();
+		$('a.comeback').hide();
 	},
 
 	initFixtureSupport: function() {
@@ -69,7 +70,22 @@ var Main = {
 
 	loadJs: function(url) {
 		url = this.expandUrl(url);
-		return $.ajax(url, { dataType: 'script', crossDomain: true });
+		return $.Deferred(function(p) {
+			var fired = false;
+			$.ajax(url, { 
+				dataType: 'script', 
+				crossDomain: true
+			}).done(function() {
+				fired || p.resolve();
+				fired = true;	
+			}); 
+
+			setTimeout(function() {
+				fired || p.reject(); 
+				fired = true;
+			}, 2000);
+
+		}).fail($.proxy(this, 'alert', '找不到文件: ' + url));
 	},
 
 	expandUrl: function(url, stamp) {
@@ -133,6 +149,15 @@ var Main = {
 		};
 
 		env.execute();	
+	},
+
+	alert:function(message) {
+		var panel = $('div.runner-panel'),
+			alert = $('div.alert', panel);
+		if (!alert.length) {
+			alert = $('<div class="alert alert-error">').appendTo(panel);
+		}
+		alert.html(message);
 	},
 
 	_specs: [],
