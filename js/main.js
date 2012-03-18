@@ -9,8 +9,7 @@ require(['jquery', 'helper', 'reporter'],
 var Main = {
 
 	init: function() {
-		var url = this.getParam('test'),
-			promise = null;
+		var url = this.getParam('test');
 		if (!url) {
 			return this.showPrompt();
 		}
@@ -32,8 +31,7 @@ var Main = {
 	},
 
 	showPrompt: function() {
-		alert('请在url中指定testcase/testsuite\n' +
-					'例: test.html?base=http://style.china.alibaba.com/app/winport/js&test=main-test/suite');
+		$('div.container').show();
 	},
 
 	initFixtureSupport: function() {
@@ -71,7 +69,7 @@ var Main = {
 
 	loadJs: function(url) {
 		url = this.expandUrl(url);
-		return $.ajax(url, { dataType: 'script', cache: true });
+		return $.ajax(url, { dataType: 'script', crossDomain: true });
 	},
 
 	expandUrl: function(url, stamp) {
@@ -113,8 +111,9 @@ var Main = {
 
 	installDescribe: function() {
 		var self = this;
+		window.describe = this._describe;
 		$.each(this._specs, function(index, args) {
-			self._describe.apply(window, args);
+			describe.apply(window, args);
 		});
 		return $.when();
 	},
@@ -144,5 +143,10 @@ var Main = {
 $($.proxy(Main, 'init'));
 
 
+});
+
+
+define('jquery', function() {
+	return jQuery;
 });
 

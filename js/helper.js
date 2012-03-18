@@ -16,10 +16,10 @@ return {
 
 	unparam: function(search) {
 		var map = {};
-		search = (search || '').replace(/^\?/, '').split('&');
+		search =(search || '').replace(/^\?/, '').split('&');
 		$.each(search, function(index, part) {
 			part = part.split('=', 2);
-			map[$.trim(part[0])] = $.trim(part[1] || '');
+			map[$.trim(part[0])] = $.trim(decodeURIComponent(part[1] || ''));
 		});
 		return map;
 	},
