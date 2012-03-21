@@ -2,7 +2,7 @@
  * 测试运行入口 
  * @author qijun.weiqj@alibaba-inc.com
  */
-require(['jquery', 'helper', 'reporter'], 
+require(['lib/jquery', 'helper', 'reporter'], 
 
 		function($, Helper, Reporter) {
 
@@ -181,7 +181,9 @@ $($.proxy(Main, 'init'));
 });
 
 
-define('jquery', function() {
+define('lib/jquery', function() {
+	var jQuery = window.jQuery;
+	window.jQuery = undefined;
 	return jQuery;
 });
 

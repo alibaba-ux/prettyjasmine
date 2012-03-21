@@ -2,7 +2,7 @@
  * ²âÊÔ½á¹ûÏÔÊ¾Reporter
  * @author qijun.weiqj@alibaba-inc.com
  */
-define(['jquery'], function($) {
+define(function() {
 
 var jasmine = {};
 

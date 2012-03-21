@@ -2,7 +2,7 @@
  * ¸¨Öú¹¤¾ßÀà
  * @author qijun.weiqj@alibaba-inc.com
  */
-define(['jquery'], function($) {
+define(['lib/jquery'], function($) {
 
 return {
 	join: function() {
