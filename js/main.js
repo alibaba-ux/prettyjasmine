@@ -77,13 +77,20 @@ var Main = {
 	},
 
 	loadJs: function(url) {
+		var self = this;
 		url = this.expandJsUrl(url);
 		return $.Deferred(function(p) {
+			if (self._cache[url]) {
+				p.resolve();
+			}
+
 			var fired = false;
 			$.ajax(url, { 
 				dataType: 'script', 
-				crossDomain: true
+				crossDomain: true,
+				cache: true
 			}).done(function() {
+				self._cache[url] = true;
 				fired || p.resolve();
 				fired = true;	
 			}); 
@@ -95,6 +102,7 @@ var Main = {
 
 		}).fail($.proxy(this, 'alert', '找不到文件: ' + url));
 	},
+
 
 	expandUrl: function(url) {
 		var base = this.getBaseUrl();	
@@ -174,7 +182,8 @@ var Main = {
 	},
 
 	_specs: [],
-	_importjs: []
+	_importjs: [],
+	_cache: {}
 };
 
 
