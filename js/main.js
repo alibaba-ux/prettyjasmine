@@ -196,6 +196,7 @@ $($.proxy(Main, 'init'));
 define('lib/jquery', function() {
 	var jQuery = window.jQuery;
 	window.jQuery = undefined;
+	window.$ = undefined;
 	return jQuery;
 });
 
