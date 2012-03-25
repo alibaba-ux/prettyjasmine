@@ -9,7 +9,7 @@ require(['lib/jquery', 'helper', 'reporter'],
 var Main = {
 
 	init: function() {
-		// 用完新鲜东西先清空，以免防止别人测试
+		// 用完东西先清空，以免防止别人测试
 		window.define = window.require = undefined;
 
 		var url = this.getParam('test');
@@ -82,6 +82,7 @@ var Main = {
 		return $.Deferred(function(p) {
 			if (self._cache[url]) {
 				p.resolve();
+				return;
 			}
 
 			var fired = false;
