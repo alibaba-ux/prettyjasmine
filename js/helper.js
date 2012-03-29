@@ -34,6 +34,11 @@ return {
 			promise = promise.pipe(fn);	
 		});
 		return promise;
+	},
+
+	debug: function() {
+		console && console.debug && 
+				console.debug.apply(console, arguments);		
 	}
 
 };

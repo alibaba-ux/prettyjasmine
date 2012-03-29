@@ -6,6 +6,8 @@ require(['lib/jquery', 'helper', 'reporter'],
 
 		function($, Helper, Reporter) {
 
+var debug = Helper.debug;
+
 var Main = {
 
 	init: function() {
@@ -16,6 +18,8 @@ var Main = {
 		if (!url) {
 			return this.showPrompt();
 		}
+
+		debug('test url: ' + url);
 
 		this.initFixtureSupport();	
 		this.proxyTest();
@@ -54,6 +58,7 @@ var Main = {
 					url = url.replace(host, '');
 					fixture.fixturesPath = '/';
 				}	
+				debug('load fixture: ' + url);
 				fixture.load(url);
 			});
 		};
@@ -79,11 +84,15 @@ var Main = {
 	loadJs: function(url) {
 		var self = this;
 		url = this.expandJsUrl(url);
+		debug('  load js: ' + url);
 		return $.Deferred(function(p) {
 			if (self._cache[url]) {
 				p.resolve();
+				debug(' js already loaded: ' + url);
 				return;
 			}
+
+			debug(' load js: ' + url);
 
 			var fired = false;
 			$.ajax(url, { 
@@ -101,7 +110,10 @@ var Main = {
 				fired = true;
 			}, 2000);
 
-		}).fail($.proxy(this, 'alert', '找不到文件: ' + url));
+		}).fail(function() {
+			debug('load js fail: ' + url);
+			self.alert('找不到文件' + url);
+		});
 	},
 
 
@@ -131,6 +143,7 @@ var Main = {
 				var defer = $.Deferred(),
 					p = self.loadJs(url);
 				p.done(function() {
+					debug('importjs success: ' + url);
 					if (self._importjs.length) {
 						self.loadImportjs().done(defer.resolve);
 					} else {
@@ -147,6 +160,7 @@ var Main = {
 		var self = this;
 		window.describe = this._describe;
 		$.each(this._specs, function(index, args) {
+			debug('install describe: ', args);
 			describe.apply(window, args);
 		});
 		return $.when();
@@ -161,6 +175,7 @@ var Main = {
 	},
 
 	runTests: function() {
+		debug('run test!');
 		var reporter = new Reporter(),
 			env = jasmine.getEnv();
 
