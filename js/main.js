@@ -86,7 +86,6 @@ var Main = {
 	loadJs: function(url) {
 		var self = this;
 		url = this.expandJsUrl(url);
-		debug('  load js: ' + url);
 		return $.Deferred(function(p) {
 			if (self._cache[url]) {
 				p.resolve();
