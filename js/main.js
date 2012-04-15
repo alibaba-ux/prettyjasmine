@@ -2,17 +2,19 @@
  * 测试运行入口 
  * @author qijun.weiqj@alibaba-inc.com
  */
-require(['lib/jquery', 'helper', 'reporter'], 
+(function($) {
 
-		function($, Helper, Reporter) {
+var Helper = pjasmine.Helper,
+	Reporter = jasmine.TrivialReporter;
 
-var debug = Helper.debug;
+var	debug = Helper.debug;
+
+window.jQuery = window.$ = undefined;
+window.pjasmine = undefined;
 
 var Main = {
 
 	init: function() {
-		// 用完东西先清空，以免防止别人测试
-		window.define = window.require = undefined;
 
 		var url = this.getParam('test');
 		if (!url) {
@@ -200,19 +202,12 @@ var Main = {
 	_specs: [],
 	_importjs: [],
 	_cache: {}
-};
 
+};
+//~ Main
 
 $($.proxy(Main, 'init'));
 
 
-});
-
-
-define('lib/jquery', function() {
-	var jQuery = window.jQuery;
-	window.jQuery = undefined;
-	window.$ = undefined;
-	return jQuery;
-});
+})(jQuery);
 

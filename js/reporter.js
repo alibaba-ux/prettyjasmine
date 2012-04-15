@@ -1,11 +1,7 @@
 /**
- * 测试结果显示Reporter
+ * 测试结果显示Reporter, 修改自jasmine-html.js
  * @author qijun.weiqj@alibaba-inc.com
  */
-define(function() {
-
-var jasmine = {};
-
 jasmine.TrivialReporter = function(doc) {
   this.document = doc || document;
   this.suiteDivs = {};
@@ -202,7 +198,3 @@ jasmine.TrivialReporter.prototype._getSpecUrl = function(spec) {
 	return spec ?  url + (url.indexOf('?') === -1 ? '?' : '&') + 'spec=' + encodeURIComponent(spec.getFullName()) : url;
 };
 
-
-return jasmine.TrivialReporter;
-  
-});

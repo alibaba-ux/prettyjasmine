@@ -2,9 +2,10 @@
  * ¸¨Öú¹¤¾ßÀà
  * @author qijun.weiqj@alibaba-inc.com
  */
-define(['lib/jquery'], function($) {
+(function($) {
+	
+pjasmine.Helper = {
 
-return {
 	join: function() {
 		var url = arguments[0] || '';
 		for (var i = 1, len = arguments.length; i < len; i++) {
@@ -44,4 +45,5 @@ return {
 };
 
 		
-});
+})(jQuery);
+
