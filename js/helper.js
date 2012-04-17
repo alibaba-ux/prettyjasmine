@@ -37,9 +37,8 @@ pjasmine.Helper = {
 		return promise;
 	},
 
-	debug: function() {
-		console && console.debug && 
-				console.debug.apply(console, arguments);		
+	debug: function(msg) {
+		window.console && console.log && console.log(msg);
 	}
 
 };
